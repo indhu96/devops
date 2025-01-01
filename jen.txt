@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', credentialsId: 'git-credentials', url: 'https://github.com/your-repository.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh './gradlew build'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh './gradlew test'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build and tests passed successfully!'
+        }
+        failure {
+            echo 'Build or tests failed.'
+        }
+    }
+}
